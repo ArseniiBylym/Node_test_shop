@@ -9,6 +9,7 @@ const flash = require('connect-flash');
 const multer = require('multer');
 
 
+const errorController = require(`./controllers/error`);
 const MONGODB_URI = `mongodb://localhost:27017/shop`;
 
 const app = express();
@@ -38,7 +39,7 @@ app.set(`view engine`, `ejs`);
 app.set(`views`, `views`)
 
 const shopRoutes = require(`./routes/shop`);
-const authRoutes = require(`./routes/auth`);
+// const authRoutes = require(`./routes/auth`);
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(multer({storage: fileStorage, fileFilter: fileFilter}).single(`image`));
@@ -78,7 +79,7 @@ app.use((req, res, next) => {
 });
 
 app.use(shopRoutes);
-app.use(authRoutes);
+// app.use(authRoutes);
 app.get(`/500`, errorController.get500);
 app.use(errorController.get404);
 app.use((error, req, res, next) => {
