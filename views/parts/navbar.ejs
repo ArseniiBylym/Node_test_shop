@@ -1,0 +1,27 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark py-0">
+    <a class="navbar-brand" href="/">
+        <img src="/images/logo.png" width="50" height="50" class="d-inline-block align-top py-0" alt="">
+    </a>
+
+    <div class="collapse navbar-collapse" id="navbarContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="<%= path === '/products' ? 'nav-link active' : 'nav-link' %>" href="/products">Products</a>
+            </li>
+            <% if (isAuth) { %>
+                <li class="nav-item">
+                    <a class="<%= path === '/admin/add-products' ? 'nav-link active' : 'nav-link' %>" href="/admin/add-products">Add product</a>
+                </li>
+            <% } %>
+        </ul>
+        <% if (!isAuth) { %>
+            <a href="/login">
+                <button class="<%= path === '/login' ? 'btn btn-outline-secondary active' : 'btn btn-outline-secondary' %>">Log In</button>
+            </a>
+        <% } else { %>
+            <a href="/logout">
+                <button class="btn btn-outline-secondary">Log out</button>
+            </a>
+        <% } %>
+    </div>
+</nav>

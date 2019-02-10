@@ -1,0 +1,25 @@
+<%- include('../parts/header.ejs') %>
+
+<body>
+    <%- include('../parts/navbar.ejs') %>
+    <div class="container">
+        <h4 class="text-center my-3">Log in</h2>
+        <div class="row justify-content-center">
+            <form class="col-4 align-self-center" method="POST" enctype="multipart/form-data" >
+                <div class="form-group">
+                    <label class="w-100">Email
+                        <input name="email" type="email" class="form-control">
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label class="w-100">Password
+                        <input name="password" type="password" class="form-control" >
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-primary col-6 offset-3">Login</button>
+            </form>
+        </div>
+    </div>
+</body>
+
+<%- include('../parts/footer.ejs') %>
