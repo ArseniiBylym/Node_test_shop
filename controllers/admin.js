@@ -25,3 +25,44 @@ exports.postAddProduct = (req, res, next) => {
             return next(error);
         })
 }
+
+exports.postDeleteProduct = (req, res, next) => {
+    const {productID} = req.body;
+    console.log(productID);
+    Product.findByIdAndDelete(productID)
+        .then(result => {
+            if (!result) {
+                console.log('Product not found');
+                res.redirect('/products');
+                return;
+            }
+            return result;
+        })
+        .then(result => {
+            console.log('Product successfuly deleted')
+            res.redirect('/products')
+        })
+        .catch(err => {
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
+        })
+}
+
+exports.getEditProduct = (req, res, next) => {
+    const {productID} = req.body;
+    Product.findById(productID)
+        .then(result => {
+            if (!result) {
+                console.log('Product not found');
+                res.redirect('/products')
+            }
+            return result;
+        })
+        .then(product => {
+            res.render('/admin/updateProduct', {
+                product: product,
+                path: '/admin/update-product'
+            })
+        })
+}

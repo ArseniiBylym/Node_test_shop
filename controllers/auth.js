@@ -22,13 +22,14 @@ exports.postLogin = (req, res, next) => {
                     if (!result) {
                         console.log('Wrong password')
                         res.redirect('/signin');
+                    } else {
+                        req.session.isLoggedIn = true;
+                        req.session.user = user;
+                        return req.session.save(err => {
+                            console.log('error');
+                            res.redirect('/');
+                        })
                     }
-                    req.session.isLoggedIn = true;
-                    req.session.user = user;
-                    return req.session.save(err => {
-                        console.log('error');
-                        res.redirect('/');
-                    })
                 })
         })
         .catch(err => {
