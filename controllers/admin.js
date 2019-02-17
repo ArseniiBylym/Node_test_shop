@@ -1,4 +1,5 @@
 const Product = require('../models/product');
+const deleteFile = require('../utils/file').deleteFile;
 
 exports.getAddProduct = (req, res, next) => {
     res.render(`admin/addProduct`, {
@@ -50,7 +51,8 @@ exports.postDeleteProduct = (req, res, next) => {
 }
 
 exports.getEditProduct = (req, res, next) => {
-    const {productID} = req.body;
+    const productID = req.params.productID;
+    console.log(productID);
     Product.findById(productID)
         .then(result => {
             if (!result) {
@@ -60,9 +62,39 @@ exports.getEditProduct = (req, res, next) => {
             return result;
         })
         .then(product => {
-            res.render('/admin/updateProduct', {
+            console.log(product)
+            res.render('admin/editProduct', {
                 product: product,
-                path: '/admin/update-product'
+                path: '/admin/edit-product'
             })
         })
+}
+
+exports.postEditProduct = (req, res, next) => {
+    console.log(req.body);
+    const { productID, title, price, description} = req.body;
+    const image = req.file
+    console.log(productID);
+    Product.findById(productID)
+        .then(product => {
+            console.log(product);
+            product.title = title || product.title;
+            product.price = price || product.price;
+            product.description = description;
+            if (image) {
+                deleteFile(product.imageUrl);
+                product.imageUrl = image.path
+            }
+            return product.save()
+                .then(result => {
+                    console.log('Product updated');
+                    res.redirect('/products');
+                })
+        })
+        .catch(err => {
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
+        })
+
 }

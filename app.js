@@ -21,7 +21,7 @@ const store = new mongoDBStore({
 // const csrfProtection = csrf();
 const fileStorage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'images');
+        cb(null, 'images/products');
     },
     filename: (req, file, cb) => {
         cb(null, Math.random() + file.originalname)
@@ -59,12 +59,17 @@ app.use(
 app.use(flash());
 app.use((req, res, next) => {
     res.locals.isAuth = req.session.isLoggedIn,
+    res.locals.user = req.session.user
+    res.locals.isAdmin = req.session.user && req.session.user.isAdmin ? true : false
     // res.locals.csrfToken = req.csrfToken();
     next();
 });
 
 app.use((req, res, next) => {
+    console.log('hello')
+    console.log(req.session.user);
     if (!req.session.user) {
+        console.log('case 1')
         return next();
     }
     User.findById(req.session.user._id)
@@ -72,6 +77,7 @@ app.use((req, res, next) => {
             if (!user) {
                 return next();
             };
+            console.log(user.email);
             res.user = user;
             next();
         })

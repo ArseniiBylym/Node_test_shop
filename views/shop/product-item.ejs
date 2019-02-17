@@ -4,35 +4,72 @@
     <%- include('../parts/navbar.ejs') %>
         <div class="container">
             <div class="row">
-               <div class="jumbotron">
+               <div class="jumbotron mb-0">
                     <img src="/<%= product.imageUrl %>" class="img-fluid" alt="">
                     <h1 class="display-4"><%= product.title %></h1>
                     <p class="lead"><%= product.description %></p>
                     <hr class="my-4">
-                    <div class="row justify-content-between px-3">
-                        <a class="btn btn-primary btn-lg" href="#" role="button">Buy now</a>
-                        <h3 class="text-secondary">$ <%= product.price %></h3>
-                    </div>
                     <% if (isAuth) { %>
+                        <div class="row justify-content-between px-3">
+                            <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#addToCartModal">Buy now</button>
+                            <h3 class="text-secondary">$ <%= product.price %></h3>
+                        </div>
+                    <% } %>
+                    <% if (isAuth && isAdmin) { %>
                         <div class="row justify-content-start mt-4">
                             <form method="POST" action="/admin/delete-product" class="col-1">
                                 <input type="hidden" name="productID" value="<%= product._id %>">
                                 <button class="btn btn-danger" type="submit">Delete</button>
                             </form>
-                            <form method="GET" action="/admin/edit-product" class="col-1">
-                                <input type="hidden" name="productID" value="<%= product._id %>">
-                                <button class="btn btn-danger" type="submit">Edit</button>
-                            </form>
+                            <a class="text-white" href="/admin/edit-product/<%= product._id %>"><button class="btn btn-danger">Edit</button></a>
                         </div>
                     <% } %>
                 </div>
             </div>
         </div>
-
-
-       
-          
-
+        <% if (isAuth) { %>
+            <div class="modal fade" id="addToCartModal" tabindex="-1" role="dialog" aria-labelledby="addToCartModalButton" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <p class="modal-title h3 text-center" id="addToCartModalButton">Add to cart</p>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <ul class="list-group">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <span>Product name</span>
+                                <span><%= product.title %></span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <span>Price</span>
+                                <span>$ <%= product.price %></span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <span>Amount</span>
+                                <div class="row align-items-center">
+                                    <button id="buttonMinus" class="btn btn-primary">-</button>
+                                    <div id="productAmount" class="mx-2">1</div>
+                                    <button id="buttonPlus" class="btn btn-primary">+</button>
+                                </div>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <span>Total price</span>
+                                <span id="totalPrice">$ <%= product.price %></span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary">Add to cart</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        <% } %>
 </body>
-
 <%- include('../parts/footer.ejs') %>
+ <script src="/js/index.js"></script>
+ </html>

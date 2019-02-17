@@ -3,31 +3,41 @@
 <body>
     <%- include('../parts/navbar.ejs') %>
     <div class="container">
-        <h2 class="text-center my-3">Update product</h2>
+        <h2 class="text-center my-3">Edit product</h2>
         <div class="row justify-content-center">
-            <form class="col-6 align-self-center" method="POST" enctype="multipart/form-data" >
+            <form class="col-6 align-self-center" method="POST" action="/admin/edit-product" enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="productName">Product name</label>
                     <input name="title" 
                         type="text" 
                         class="form-control" 
                         id="productName" 
-                        value=""
+                        value="<%= product.title %>"
                         placeholder="Enter the product name">
                 </div>
                 <div class="form-group">
                     <label for="productPrice">Price</label>
-                    <input name="price" step="0.01" type="number" class="form-control" id="productPrice" placeholder="$0.00">
+                    <input name="price" 
+                        step="0.01" 
+                        type="number" 
+                        class="form-control" 
+                        id="productPrice" 
+                        value="<%= product.price %>"
+                        placeholder="$0.00">
                 </div>
                 <div class="form-group">
                     <label for="productDescription">Description</label>
-                    <textarea name="description" class="form-control" id="productDescription" rows="3"></textarea>
+                    <textarea name="description" 
+                        class="form-control" 
+                        id="productDescription"
+                        rows="3"><%= product.description %></textarea>
                 </div>
                 <div class="form-group">
                     <label for="productImage">Add product image</label>
                     <input name="image" id="image" type="file" class="form-control-file">
                 </div>
-                <button type="submit" class="btn btn-primary col-6 offset-3">Add</button>
+                <input type="hidden" name="productID" value="<%= product._id %>">
+                <button type="submit" class="btn btn-primary col-6 offset-3">Update</button>
             </form>
         </div>
     </div>

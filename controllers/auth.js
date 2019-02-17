@@ -48,6 +48,10 @@ exports.getSignin = (req, res, next) => {
 exports.postSignin = (req, res, next) => {
     const {name, email, password, confPassword} = req.body;
 
+    if(password !== confPassword) {
+        return res.redirect('/login');
+    }
+
     bcrypt
         .hash(password, 12)
         .then(hPassword => {
@@ -55,6 +59,7 @@ exports.postSignin = (req, res, next) => {
                 name: name,
                 email: email,
                 password: hPassword,
+                isAdmin: false,
             });
             return user.save();
         })
