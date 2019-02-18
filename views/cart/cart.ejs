@@ -1,0 +1,37 @@
+<%- include('../parts/header.ejs') %>
+
+<body>
+    <%- include('../parts/navbar.ejs') %>
+    <h2 class="text-center mt-4">Cart</h2>
+
+        <div class="container">
+            <div class="row">
+                <%if (user.cart && user.cart.length > 0) { %>
+                <div class="accordion" id="cartWrapper">
+                    <% for (let prod of user.cart) {%>
+                        <div class="card">
+                            <div class="card-header">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#<%= prod._id %>" aria-expanded="true" aria-controls="<%= prod._id %>">
+                                <%= prod.title %>
+                                </button>
+                                <div>$ <%= prod.price %></div>
+                            </h5>
+                            </div>
+
+                            <div id="<%= prod._id %>" class="collapse show" aria-labelledby="<%= prod._id %>" data-parent="#cartWrapper">
+                            <div class="card-body row">
+                                <div class="col-4"><img class="rounded float-left" src="<%= prod.imageUrl %>" alt="Card image cap"></div>
+                                <div class="col-8"><%= prod.description %></div>
+                            </div>
+                            </div>
+                        </div>
+                    <% } %>
+                <% } else {%>
+                    <h3>Youre cart is empty now</h3>
+                <% } %>
+            </div>
+        </div>
+</body>
+<%- include('../parts/footer.ejs') %>
+</html>

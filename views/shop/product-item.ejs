@@ -62,7 +62,10 @@
                         </ul>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary">Add to cart</button>
+                        <form method="post" action="/cart">
+                        <input type="hidden" name="product" value="<%= product._id %>">
+                        <input type="hidden" name="userId" value="<%= user._id %>">
+                        <button type="submit" class="btn btn-primary">Add to cart</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     </div>
                     </div>

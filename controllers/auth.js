@@ -60,6 +60,7 @@ exports.postSignin = (req, res, next) => {
                 email: email,
                 password: hPassword,
                 isAdmin: false,
+                cart: []
             });
             return user.save();
         })

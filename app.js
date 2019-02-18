@@ -42,6 +42,7 @@ app.set(`views`, `views`)
 const shopRoutes = require(`./routes/shop`);
 const adminRoutes = require('./routes/admin');
 const authRoutes = require(`./routes/auth`);
+const cartRoutes = require('./routes/cart');
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(multer({storage: fileStorage, fileFilter: fileFilter}).single(`image`));
@@ -59,8 +60,8 @@ app.use(
 app.use(flash());
 app.use((req, res, next) => {
     res.locals.isAuth = req.session.isLoggedIn,
-    res.locals.user = req.session.user
-    res.locals.isAdmin = req.session.user && req.session.user.isAdmin ? true : false
+    res.locals.user = req.session.user,
+    res.locals.isAdmin = req.session.user && req.session.user.isAdmin ? true : false,
     // res.locals.csrfToken = req.csrfToken();
     next();
 });
@@ -78,6 +79,7 @@ app.use((req, res, next) => {
                 return next();
             };
             console.log(user.email);
+            console.log('User cart is: ', user.cart.length)
             res.user = user;
             next();
         })
@@ -89,6 +91,7 @@ app.use((req, res, next) => {
 app.use(shopRoutes);
 app.use(adminRoutes);
 app.use(authRoutes);
+app.use(cartRoutes);
 app.get(`/500`, errorController.get500);
 app.use(errorController.get404);
 // app.use((error, req, res, next) => {
