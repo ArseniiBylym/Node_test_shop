@@ -1,0 +1,14 @@
+<% if (errorMessage && errorMessage.length > 0) { %>
+    <% for (let message of errorMessage) { %>
+        <div class="alert alert-danger customMessage" role="alert">
+            <div><%= message %></div>
+        </div>
+    <% } %>
+<% } %>
+<% if (infoMessage && infoMessage.length > 0) { %>
+    <% for (let message of infoMessage) { %>
+        <div class="alert alert-primary customMessage" role="alert">
+            <div><%= message %></div>
+        </div>
+    <% } %>
+<% } %>

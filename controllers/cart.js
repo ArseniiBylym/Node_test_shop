@@ -21,13 +21,6 @@ exports.getUserCart = (req, res, next) => {
             })
             
         })
-    // const totalPrice = req.user.cart.reduce((prevVal, currentVal) => {
-    //     return prevVal.price + currentVal.price;
-    // })
-    // res.render(`cart/cart`, {
-    //     path: `/cart`,
-        // totalPrice: totalPrice ? totalPrice : null
-    // })
 }
 
 exports.addToCart = (req, res, next) => {
@@ -47,6 +40,7 @@ exports.addToCart = (req, res, next) => {
                     user.save()
                         .then(result => {
                             console.log('Product add to user cart');
+                            req.flash('infoMessage', "Product added to the cart")
                             return res.redirect('/products')
                         })
                 })
@@ -62,6 +56,7 @@ exports.removeFromCart = (req, res, next) => {
             user.save()
                 .then(result => {
                     console.log('Product removed from user cart');
+                    req.flash('infoMessage', "Product was removed from the cart")
                     return res.redirect('/cart')
                 })
         })
@@ -77,6 +72,7 @@ exports.comfirmOrder = (req, res, next) => {
         user.save()
             .then(result => {
                 console.log('Order sended to manager and cart is cleared');
+                req.flash('infoMessage', "Thanks for your order! We'll contact with you soon.")
                 return res.redirect('/cart')
             })
     })

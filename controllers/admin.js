@@ -18,6 +18,7 @@ exports.postAddProduct = (req, res, next) => {
     product.save()
         .then(result => {
             console.log('Product created')
+            req.flash('infoMessage', 'New product was successfully added')
             res.redirect('/products');
         })
         .catch(err => {
@@ -40,7 +41,7 @@ exports.postDeleteProduct = (req, res, next) => {
             return result;
         })
         .then(result => {
-            console.log('Product successfuly deleted')
+            req.flash('infoMessage', 'Product was successfully deleted')
             res.redirect('/products')
         })
         .catch(err => {
@@ -68,14 +69,14 @@ exports.getEditProduct = (req, res, next) => {
                 path: '/admin/edit-product'
             })
         })
-}
-
-exports.postEditProduct = (req, res, next) => {
-    console.log(req.body);
-    const { productID, title, price, description} = req.body;
-    const image = req.file
-    console.log(productID);
-    Product.findById(productID)
+    }
+    
+    exports.postEditProduct = (req, res, next) => {
+        console.log(req.body);
+        const { productID, title, price, description} = req.body;
+        const image = req.file
+        console.log(productID);
+        Product.findById(productID)
         .then(product => {
             console.log(product);
             product.title = title || product.title;
@@ -86,10 +87,11 @@ exports.postEditProduct = (req, res, next) => {
                 product.imageUrl = image.path
             }
             return product.save()
-                .then(result => {
-                    console.log('Product updated');
-                    res.redirect('/products');
-                })
+            .then(result => {
+                console.log('Product updated');
+                req.flash('infoMessage', 'Product was successfully updated')
+                res.redirect('/products');
+            })
         })
         .catch(err => {
             const error = new Error(err);

@@ -66,6 +66,12 @@ app.use((req, res, next) => {
 });
 
 app.use((req, res, next) => {
+    res.locals.errorMessage = req.flash('errorMessage');
+    res.locals.infoMessage = req.flash('infoMessage')
+    next()
+})
+
+app.use((req, res, next) => {
     console.log('hello')
     console.log(req.session.user);
     if (!req.session.user) {

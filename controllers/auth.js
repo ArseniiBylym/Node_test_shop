@@ -14,14 +14,16 @@ exports.postLogin = (req, res, next) => {
     User.findOne({email: email})
         .then(user => {
             if (!user) {
-                res.redirect('/signin');
+                req.flash('errorMessage', 'You are not autorised, try to create a new account')
+                res.redirect('/login');
             }
             bcrypt
                 .compare(password, user.password)
                 .then(result => {
                     if (!result) {
                         console.log('Wrong password')
-                        res.redirect('/signin');
+                        req.flash('errorMessage', 'Wrong password or email')
+                        res.redirect('/login');
                     } else {
                         req.session.isLoggedIn = true;
                         req.session.user = user;
@@ -49,6 +51,7 @@ exports.postSignin = (req, res, next) => {
     const {name, email, password, confPassword} = req.body;
 
     if(password !== confPassword) {
+        req.flash('errorMessage', "Password doesn't matched, try again")
         return res.redirect('/login');
     }
 
@@ -65,6 +68,7 @@ exports.postSignin = (req, res, next) => {
             return user.save();
         })
         .then(user => {
+            req.flash('infoMessage', "New acount was successfully created, now you can login")
             res.redirect('/login');
         })
         .catch(err => {
