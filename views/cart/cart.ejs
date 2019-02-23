@@ -5,28 +5,48 @@
     <h2 class="text-center mt-4">Cart</h2>
 
         <div class="container">
-            <div class="row">
+            <div class="row-12" >
                 <%if (user.cart && user.cart.length > 0) { %>
-                <div class="accordion" id="cartWrapper">
-                    <% for (let prod of user.cart) {%>
+                <div id="accordion">
+                    <% for (let i = 0; i < user.cart.length; i++ ) {%>
                         <div class="card">
-                            <div class="card-header">
-                            <h5 class="mb-0">
-                                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#<%= prod._id %>" aria-expanded="true" aria-controls="<%= prod._id %>">
-                                <%= prod.title %>
-                                </button>
-                                <div>$ <%= prod.price %></div>
-                            </h5>
+                            <div class="card-header" id="headingCartOrder-<%= i %>" >
+                                <div class="mx-3 row align-items-center justify-content-end">
+                                <h5 class="mb-0 mr-auto">
+                                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseCartOrder-<%=i %>" aria-expanded="true" aria-controls="collapseCartOrder-<%= i %>">
+                                     <%= user.cart[i].title %>
+                                    </button>
+                                </h5>
+                                <h5 class="text-secondary mb-0">$ <%= user.cart[i].price %></h5>
+                                <form method="post" action="/cart/remove-item">
+                                    <input type="hidden" name="productId" value="<%= user.cart[i]._id %>">
+                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                    <button type="submit" class="close ml-4 text-danger" data-toggle="tooltip" data-placement="top" title="Remove from order">
+                                        &times;
+                                    </button>
+                                </form>
+                                </div>
                             </div>
-
-                            <div id="<%= prod._id %>" class="collapse show" aria-labelledby="<%= prod._id %>" data-parent="#cartWrapper">
-                            <div class="card-body row">
-                                <div class="col-4"><img class="rounded float-left" src="<%= prod.imageUrl %>" alt="Card image cap"></div>
-                                <div class="col-8"><%= prod.description %></div>
-                            </div>
+                            <div id="collapseCartOrder-<%= i %>" class="collapse" aria-labelledby="headingCartOrder-<%= i %>" data-parent="#accordion">
+                                <div class="card-body">
+                                    <img src="<%= user.cart[i].imageUrl %>" class="rounded float-left" style="width: 200px; height: auto" alt="...">
+                                    <p><%= user.cart[i].description %></p>
+                                </div>
                             </div>
                         </div>
+                    </div>
                     <% } %>
+                    <div class="row d-flex justify-content-end m-4 mr-5">
+                        <div class="mr-4 h4">Total price</div>
+                        <div class="h4">$ <%= totalPrice %>
+                        </div>
+                    </div>
+                    <div class="row-12">
+                        <form method="post" action="/cart/confirm-order">
+                        <input type="hidden" name="fullOrder" value="<%= user.cart %>">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                        <button class="btn btn-primary mx-auto mt-2 d-block">Confirm order</button>
+                    </div>
                 <% } else {%>
                     <h3>Youre cart is empty now</h3>
                 <% } %>

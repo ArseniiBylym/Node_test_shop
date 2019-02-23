@@ -18,6 +18,7 @@
                                 <input name="password" type="password" class="form-control" >
                             </label>
                         </div>
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                         <button type="submit" class="btn btn-primary col-6 offset-3">Login</button>
                         <div class="text-center"><a class="nav-link text-primary" href="/signin">Create new account</a></div>
                     </form>

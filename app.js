@@ -18,7 +18,7 @@ const store = new mongoDBStore({
     uri: MONGODB_URI,
     collection: `sessions`,
 });
-// const csrfProtection = csrf();
+const csrfProtection = csrf();
 const fileStorage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, 'images/products');
@@ -56,13 +56,12 @@ app.use(
         store: store
     })
 );
-// app.use(csrfProtection);
+app.use(csrfProtection);
 app.use(flash());
 app.use((req, res, next) => {
     res.locals.isAuth = req.session.isLoggedIn,
-    res.locals.user = req.session.user,
     res.locals.isAdmin = req.session.user && req.session.user.isAdmin ? true : false,
-    // res.locals.csrfToken = req.csrfToken();
+    res.locals.csrfToken = req.csrfToken();
     next();
 });
 
@@ -80,13 +79,21 @@ app.use((req, res, next) => {
             };
             console.log(user.email);
             console.log('User cart is: ', user.cart.length)
-            res.user = user;
+            // req.user = user;
+            res.locals.user = user;
             next();
         })
         .catch(error => {
             next(new Error(error));
         });
 });
+
+// app.use((res, req, next) => {
+//     if (req.user) {
+//         res.locals.user = req.user;
+//     }
+//     next();
+// })
 
 app.use(shopRoutes);
 app.use(adminRoutes);
@@ -102,7 +109,7 @@ app.use(errorController.get404);
 // });
 
 mongoose
-    .connect(MONGODB_URI)
+    .connect(MONGODB_URI, { useNewUrlParser: true })
     .then(result => {
         app.listen(process.env.PORT || 3030);
     })

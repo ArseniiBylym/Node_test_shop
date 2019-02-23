@@ -37,6 +37,7 @@
                     <input name="image" id="image" type="file" class="form-control-file">
                 </div>
                 <input type="hidden" name="productID" value="<%= product._id %>">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                 <button type="submit" class="btn btn-primary col-6 offset-3">Update</button>
             </form>
         </div>
