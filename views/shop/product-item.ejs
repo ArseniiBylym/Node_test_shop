@@ -5,15 +5,15 @@
     <%- include('../parts/messages.ejs') %>
         <div class="container">
             <div class="row">
-               <div class="jumbotron mb-0">
+               <div class="jumbotron mb-0 col-lg-10 offset-lg-1">
                     <img src="/<%= product.imageUrl %>" class="img-fluid" alt="">
-                    <h1 class="display-4"><%= product.title %></h1>
+                    <h1 class="h2 mt-2" ><%= product.title %></h1>
                     <p class="lead"><%= product.description %></p>
                     <hr class="my-4">
                     <% if (isAuth) { %>
                         <div class="row justify-content-between px-3">
                             <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#addToCartModal">Buy now</button>
-                            <h3 class="text-secondary">$ <%= product.price %></h3>
+                            <h3 class="text-secondary mb-0">$ <%= product.price %></h3>
                         </div>
                     <% } %>
                     <% if (isAuth && isAdmin) { %>
