@@ -1,0 +1,56 @@
+<%- include('../parts/header.ejs') %>
+
+<body>
+    <%- include('../parts/navbar.ejs') %>
+    <%- include('../parts/messages.ejs') %>
+    <h2 class="text-center my-4">All orders</h2>
+        <% if (orders.length > 0) { %>
+        <div class="row">
+        <div class="col-10 offset-1">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Order date</th>
+                        <th scope="col">Total price</th>
+                        <th scope="col">Status</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for (let order of orders) { %>
+                        <%  let rejected = order.status === 'rejected' ? 'selected' : ''
+                            let pending = order.status === 'pending' ? 'selected' : ''
+                            let sent = order.status === 'sent' ? 'selected' : ''
+                            let completed = order.status === 'completed' ? 'selected' : '' %>
+                        <tr>
+                            <th scope="row"><%= order.index %></th>
+                            <td><%= order.date.toLocaleString() %></td>
+                            <td>$ <%= order.totalPrice %></td>
+                            <td>
+                                <form name="orderForm" method="post" action="/admin/all-orders/<%= order._id %> ">
+                                    <input type="hidden" name="orderId" value="<%= order._id %>">
+                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                    <select name="status" id="orderStatusSelect" data-order-id="<%= order._id %>" data-csrf="<%= csrfToken %>" class="form-control">
+                                        <option value="rejected" <%= rejected %> >Rejected</option>
+                                        <option value="pending" <%= pending %> >Pending for payment</option>
+                                        <option value="sent" <%= sent %> >Sent to user</option>
+                                        <option value="completed" <%= completed %> >Completed</option>
+                                    </select>
+                                    <button id="sendFormButtonHidden" class="d-none" type="submit">Send data</button>
+                                </form>
+                            </td>
+                            <td><button class="btn btn-danger">Remove order</button></td>
+                        </tr>
+                        <div><%= order.status %></div>
+                    <% } %>
+                </tbody>
+            </table>
+            </div>
+            </div>
+        <% } else { %>
+            <h3>You have no orders yet</h3>
+        <% } %>
+    </body>
+<%- include('../parts/footer.ejs') %>
+</html>

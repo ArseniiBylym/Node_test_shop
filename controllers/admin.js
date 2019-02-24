@@ -1,4 +1,5 @@
 const Product = require('../models/product');
+const Order = require('../models/order');
 const deleteFile = require('../utils/file').deleteFile;
 
 exports.getAddProduct = (req, res, next) => {
@@ -98,5 +99,26 @@ exports.getEditProduct = (req, res, next) => {
             error.httpStatusCode = 500;
             return next(error);
         })
+}
 
+exports.getAllOrders = async (req, res, next) => {
+    let allOrders = await Order.find();
+    console.log(allOrders[0].status)
+    res.render('admin/allOrders', {
+        path: '/admin/all-orders',
+        orders: allOrders
+    })
+}
+
+exports.changeOrderStatus = (req, res, next) => {
+    const {orderId, status} = req.body;
+    Order.findById(orderId)
+        .then(order => {
+            order.status = status;
+            order.save()
+                .then(result => {
+                    req.flash('infoMessage', 'Order status has changed')
+                    res.redirect('/admin/all-orders')
+                }) 
+        })
 }

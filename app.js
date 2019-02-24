@@ -102,7 +102,7 @@ app.use((req, res, next) => {
 // })
 
 app.use(shopRoutes);
-app.use(adminRoutes);
+app.use('/admin', adminRoutes);
 app.use(authRoutes);
 app.use('/user', userRoutes);
 app.get(`/500`, errorController.get500);

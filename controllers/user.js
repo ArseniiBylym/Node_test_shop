@@ -82,7 +82,7 @@ exports.comfirmOrder = async (req, res, next) => {
     const order = new Order({
         index: currentIndex,
         date: new Date,
-        status: 'pending for payment',
+        status: 'pending',
         products: fullOrder,
         totalPrice: totalPrice,
         userId: req.session.user._id
