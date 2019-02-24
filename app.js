@@ -42,7 +42,7 @@ app.set(`views`, `views`)
 const shopRoutes = require(`./routes/shop`);
 const adminRoutes = require('./routes/admin');
 const authRoutes = require(`./routes/auth`);
-const cartRoutes = require('./routes/cart');
+const userRoutes = require('./routes/user');
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(multer({storage: fileStorage, fileFilter: fileFilter}).single(`image`));
@@ -104,7 +104,7 @@ app.use((req, res, next) => {
 app.use(shopRoutes);
 app.use(adminRoutes);
 app.use(authRoutes);
-app.use(cartRoutes);
+app.use('/user', userRoutes);
 app.get(`/500`, errorController.get500);
 app.use(errorController.get404);
 // app.use((error, req, res, next) => {

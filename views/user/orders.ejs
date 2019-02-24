@@ -1,0 +1,53 @@
+<%- include('../parts/header.ejs') %>
+
+<body>
+    <%- include('../parts/navbar.ejs') %>
+    <%- include('../parts/messages.ejs') %>
+    <h2 class="text-center my-4">Orders</h2>
+        <% if (orders.length > 0) { %>
+            <% for (let order of orders) { %>
+                <div class="row-12">
+                    <div class="col col-md-6 offset-md-3 card my-4 bg-light">
+                        <div class="cart-header d-flex flex-row justify-content-between">
+                            <div>Order #<%= order.index %></div>
+                            <div><%= order.date.toLocaleString() %></div>
+                        </div>
+                        <div class="cart-body">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Product name</th>
+                                        <th scope="col">Product price</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% for (let i = 0; i < order.products.length; i++) { %>
+                                        <tr>
+                                            <th scope="row"><%= i + 1 %></th>
+                                            <td><%= order.products[i].title %></td>
+                                            <td>$ <%= order.products[i].price %></td>
+                                        </tr>
+                                    <% } %>
+                                    <tr>
+                                        <th scope="row"></th>
+                                        <th class="colspan">Total order price</th>
+                                        <th>$ <%= order.totalPrice %></th>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row"></th>
+                                        <th class="colspan">Order status</th>
+                                        <th><%= order.status %></th>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            <% } %>
+        <% } else { %>
+            <h3>You have no active orders yet</h3>
+        <% } %>
+    </body>
+<%- include('../parts/footer.ejs') %>
+</html>

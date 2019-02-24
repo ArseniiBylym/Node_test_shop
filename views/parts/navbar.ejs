@@ -25,7 +25,7 @@
                 </li>
             <% } else { %>
                 <li class="nav-item d-flex align-items-center my-2 my-lg-0">
-                    <a href="/cart" class="d-flex align-items-center flex-row">
+                    <a href="/user/cart" class="d-flex align-items-center flex-row">
                         <img src="/images/shopping-cart.svg" style="width: 20px; height: 20px" class="text-primary w-40 h-40">
                         <span class=" mr-4 badge badge-pill badge-light">
                             <% if (user) { %>
@@ -48,7 +48,7 @@
                     <div class="dropdown-menu mt-2 w-100" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="/user/profile">Profile settings</a>
                         <a class="dropdown-item" href="/user/orders">Orders</a>
-                        <a class="dropdown-item" href="/cart">Cart</a>
+                        <a class="dropdown-item" href="/user/cart">Cart</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="/logout">Log out</a>
                     </div>

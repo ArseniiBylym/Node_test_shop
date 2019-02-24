@@ -19,7 +19,7 @@
                                     </button>
                                 </h5>
                                 <h5 class="text-secondary mb-0">$ <%= user.cart[i].price %></h5>
-                                <form method="post" action="/cart/remove-item">
+                                <form method="post" action="/user/cart/remove-item">
                                     <input type="hidden" name="productId" value="<%= user.cart[i]._id %>">
                                     <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                                     <button type="submit" class="close ml-4 text-danger" data-toggle="tooltip" data-placement="top" title="Remove from order">
@@ -30,7 +30,7 @@
                             </div>
                             <div id="collapseCartOrder-<%= i %>" class="collapse" aria-labelledby="headingCartOrder-<%= i %>" data-parent="#accordion">
                                 <div class="card-body p-0">
-                                    <img src="<%= user.cart[i].imageUrl %>" class="rounded float-left " style="width: 300px; height: auto" alt="...">
+                                    <img src="/<%= user.cart[i].imageUrl %>" class="rounded float-left " style="width: 300px; height: auto" alt="...">
                                     <p class="pt-3"><%= user.cart[i].description %></p>
                                 </div>
                             </div>
@@ -43,8 +43,8 @@
                         </div>
                     </div>
                     <div class="row-12">
-                        <form method="post" action="/cart/confirm-order">
-                        <input type="hidden" name="fullOrder" value="<%= user.cart %>">
+                        <form method="post" action="/user/cart/confirm-order">
+                        <input type="hidden" name="fullOrder" value="<%= JSON.stringify(user.cart) %>">
                         <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                         <button class="btn btn-primary mx-auto mt-2 d-block">Confirm order</button>
                     </div>

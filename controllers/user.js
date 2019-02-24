@@ -1,5 +1,6 @@
 const Product = require('../models/product');
-const User = require('../models/user')
+const User = require('../models/user');
+const Order = require('../models/order');
 
 exports.getUserCart = (req, res, next) => {
 
@@ -15,7 +16,7 @@ exports.getUserCart = (req, res, next) => {
                 })
             }
             console.log('Total ptice is', totalPrice);
-            res.render('cart/cart', {
+            res.render('user/cart', {
                 path: '/cart',
                 totalPrice: totalPrice
             })
@@ -57,24 +58,63 @@ exports.removeFromCart = (req, res, next) => {
                 .then(result => {
                     console.log('Product removed from user cart');
                     req.flash('infoMessage', "Product was removed from the cart")
-                    return res.redirect('/cart')
+                    return res.redirect('/user/cart')
                 })
         })
 }
 
-exports.comfirmOrder = (req, res, next) => {
-    const {fullOrder} = req.body;
+exports.comfirmOrder = async (req, res, next) => {
+    let {fullOrder} = req.body;
+    fullOrder = JSON.parse(fullOrder);
+    console.log(fullOrder)
 
-    console.log("Full order is", fullOrder);
-    User.findById(req.session.user._id)
-    .then(user => {
-        user.cart = [];
-        user.save()
-            .then(result => {
-                console.log('Order sended to manager and cart is cleared');
-                req.flash('infoMessage', "Thanks for your order! We'll contact with you soon.")
-                return res.redirect('/cart')
-            })
+    let totalPrice = 0;
+    
+    fullOrder.forEach((value, i) => {
+        totalPrice += +value.price;
     })
 
+    const lastIndex = await Order.find({}).count()
+        
+    console.log('last index: ', lastIndex);
+    const currentIndex = lastIndex > 0 ? lastIndex + 1 : 1;
+
+    const order = new Order({
+        index: currentIndex,
+        date: new Date,
+        status: 'pending for payment',
+        products: fullOrder,
+        totalPrice: totalPrice,
+        userId: req.session.user._id
+    });
+    order.save()
+        .then(orderResult => {
+            User.findById(req.session.user._id)
+            .then(user => {
+                user.cart = [];
+                user.save()
+                    .then(result => {
+                        req.flash('infoMessage', "Thanks for your order! We'll contact with you soon.")
+                        return res.redirect('/user/cart')
+                    })
+            })
+        })
+        .catch(err => {
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
+        })
+}
+
+exports.getUserOrders = (req, res, next) => {
+    const userId = req.session.user._id;
+
+    Order.find({userId: userId})
+        .then(orders => {
+            console.log(orders);
+            res.render('user/orders', {
+                path: '/user/orders',
+                orders: orders,
+            })
+        })
 }
