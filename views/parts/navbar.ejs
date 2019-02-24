@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-0">
     <a class="navbar-brand" href="/">
-        <img src="/images/logo.png" width="50" height="50" class="d-inline-block align-top py-0" alt="">
+        <img src="/images/logo.png" width="40" height="40" class="d-inline-block align-top py-0" alt="">
     </a>
      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -24,14 +24,6 @@
                     </a>
                 </li>
             <% } else { %>
-                <li class="nav-item d-flex align-items-center flex-row my-2 my-lg-0">
-                    <img src="/images/user.svg" style="width: 20px; height: 20px" class="text-primary w-40 h-40">
-                    <p class="text-white my-0 ml-1 mr-4">
-                        <% if(user) { %>
-                        <%= user.email %>
-                        <% } %>
-                    </p>
-                </li>
                 <li class="nav-item d-flex align-items-center my-2 my-lg-0">
                     <a href="/cart" class="d-flex align-items-center flex-row">
                         <img src="/images/shopping-cart.svg" style="width: 20px; height: 20px" class="text-primary w-40 h-40">
@@ -44,11 +36,29 @@
                         </span>
                     </a>
                 </li>
-                <li class="nav-item d-flex align-items-center my-2 my-lg-0">
+                <li class="nav-item dropdown d-flex align-items-center flex-row my-2 my-lg-0">
+                    <a class="nav-link dropdown-toggle d-flex flex-row align-items-center" href="#" id="navbarUserDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
+                        <img src="/images/user.svg" style="width: 20px; height: 20px" class="text-primary w-40 h-40">
+                        <p class="text-white my-0 ml-1 mr-4">
+                            <% if(user) { %>
+                            <%= user.email %>
+                            <% } %>
+                        </p>
+                    </a>
+                    <div class="dropdown-menu mt-2 w-100" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="/user/profile">Profile settings</a>
+                        <a class="dropdown-item" href="/user/orders">Orders</a>
+                        <a class="dropdown-item" href="/cart">Cart</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/logout">Log out</a>
+                    </div>
+                </li>
+                
+                <!-- <li class="nav-item d-flex align-items-center my-2 my-lg-0">
                     <a href="/logout">
                         <button class="btn btn-outline-secondary">Log out</button>
                     </a>
-                </li>
+                </li> -->
             <% } %>
         </ul>
     </div>

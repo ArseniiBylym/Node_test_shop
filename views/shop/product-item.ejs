@@ -18,12 +18,12 @@
                     <% } %>
                     <% if (isAuth && isAdmin) { %>
                         <div class="row justify-content-start mt-4">
-                            <form method="POST" action="/admin/delete-product" class="col-1">
+                            <form method="POST" action="/admin/delete-product" class="col-12 col-sm-3 col-lg-2 mt-3 mt-sm-0">
                                 <input type="hidden" name="productID" value="<%= product._id %>">
                                 <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                                <button class="btn btn-danger" type="submit">Delete</button>
+                                <button class="btn btn-danger w-100" type="submit">Delete</button>
                             </form>
-                            <a class="text-white col-1" href="/admin/edit-product/<%= product._id %>"><button class="btn btn-danger">Edit</button></a>
+                            <a class="text-white col-12 col-sm-3 col-lg-2 mt-3 mt-sm-0" href="/admin/edit-product/<%= product._id %>"><button class="btn btn-danger w-100">Edit</button></a>
                         </div>
                     <% } %>
                 </div>
