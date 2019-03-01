@@ -9,12 +9,12 @@ exports.getUserCart = (req, res, next) => {
 
     User.findById(req.session.user._id)
         .then(user => {
-            if(!user) {
+            if (!user) {
                 return res.redirect('/products')
             }
             let totalPrice = 0;
             if (user.cart.length > 0) {
-               user.cart.forEach(item => {
+                user.cart.forEach(item => {
                     totalPrice += +item.price
                 })
             }
@@ -23,7 +23,7 @@ exports.getUserCart = (req, res, next) => {
                 path: '/cart',
                 totalPrice: totalPrice
             })
-            
+
         })
 }
 
@@ -34,7 +34,7 @@ exports.addToCart = (req, res, next) => {
     Product.findById(product)
         .then(prod => {
             console.log(prod);
-            if(!prod) {
+            if (!prod) {
                 console.log('Product not found');
                 return res.redirect('/products');
             }
@@ -52,7 +52,7 @@ exports.addToCart = (req, res, next) => {
 }
 
 exports.removeFromCart = (req, res, next) => {
-    const {productId} = req.body;
+    const { productId } = req.body;
 
     User.findById(req.session.user._id)
         .then(user => {
@@ -67,18 +67,18 @@ exports.removeFromCart = (req, res, next) => {
 }
 
 exports.comfirmOrder = async (req, res, next) => {
-    let {fullOrder} = req.body;
+    let { fullOrder } = req.body;
     fullOrder = JSON.parse(fullOrder);
     console.log(fullOrder)
 
     let totalPrice = 0;
-    
+
     fullOrder.forEach((value, i) => {
         totalPrice += +value.price;
     })
 
     const lastIndex = await Order.find({}).count()
-        
+
     console.log('last index: ', lastIndex);
     const currentIndex = lastIndex > 0 ? lastIndex + 1 : 1;
 
@@ -93,26 +93,26 @@ exports.comfirmOrder = async (req, res, next) => {
     order.save()
         .then(orderResult => {
             User.findById(req.session.user._id)
-            .then(user => {
-                user.cart = [];
-                user.save()
-                    .then(result => {
-                        req.flash('infoMessage', "Thanks for your order! We'll contact with you soon.")
-                        res.redirect('/user/cart')
-                        const msg = {
-                            to: req.session.user.email,
-                            from: 'node-test-shop@example.com',
-                            subject: `Order #${currentIndex}`,
-                            text: 'and easy to do anywhere, even with Node.js',
-                            html: `<p>Order #${currentIndex} by total sum $${totalPrice} was successfully created</p>
+                .then(user => {
+                    user.cart = [];
+                    user.save()
+                        .then(result => {
+                            req.flash('infoMessage', "Thanks for your order! We'll contact with you soon.")
+                            res.redirect('/user/cart')
+                            const msg = {
+                                to: req.session.user.email,
+                                from: 'node-test-shop@example.com',
+                                subject: `Order #${currentIndex}`,
+                                text: 'and easy to do anywhere, even with Node.js',
+                                html: `<p>Order #${currentIndex} by total sum $${totalPrice} was successfully created</p>
                                 <p>You can check the order status in <a href="http://localhost:3030/user/orders">your orders page<a></p>`
-                          };
-                          return sgMail.send(msg);
-                    })
-                    .catch(error => {
-                        console.log(error);
-                    })
-            })
+                            };
+                            return sgMail.send(msg);
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        })
+                })
         })
         .catch(err => {
             const error = new Error(err);
@@ -124,7 +124,7 @@ exports.comfirmOrder = async (req, res, next) => {
 exports.getUserOrders = (req, res, next) => {
     const userId = req.session.user._id;
 
-    Order.find({userId: userId})
+    Order.find({ userId: userId })
         .then(orders => {
             console.log(orders);
             res.render('user/orders', {
