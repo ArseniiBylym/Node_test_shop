@@ -31,18 +31,17 @@
                                 <form name="orderForm" method="post" action="/admin/all-orders/<%= order._id %> ">
                                     <input type="hidden" name="orderId" value="<%= order._id %>">
                                     <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                                    <select name="status" id="orderStatusSelect" data-order-id="<%= order._id %>" data-csrf="<%= csrfToken %>" class="form-control">
+                                    <select name="status" id="orderStatusSelect<%= order._id %>" data-order-id="<%= order._id %>" data-csrf="<%= csrfToken %>" class="orderStatusSelect form-control">
                                         <option value="rejected" <%= rejected %> >Rejected</option>
                                         <option value="pending" <%= pending %> >Pending for payment</option>
                                         <option value="sent" <%= sent %> >Sent to user</option>
                                         <option value="completed" <%= completed %> >Completed</option>
                                     </select>
-                                    <button id="sendFormButtonHidden" class="d-none" type="submit">Send data</button>
+                                    <button id="sendFormButtonHidden<%= order._id %>" class="d-none" type="submit">Send data</button>
                                 </form>
                             </td>
                             <td><button class="btn btn-danger">Remove order</button></td>
                         </tr>
-                        <div><%= order.status %></div>
                     <% } %>
                 </tbody>
             </table>

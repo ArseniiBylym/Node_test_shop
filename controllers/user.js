@@ -1,6 +1,9 @@
 const Product = require('../models/product');
 const User = require('../models/user');
 const Order = require('../models/order');
+const sgMail = require('@sendgrid/mail');
+
+sgMail.setApiKey('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');
 
 exports.getUserCart = (req, res, next) => {
 
@@ -95,7 +98,19 @@ exports.comfirmOrder = async (req, res, next) => {
                 user.save()
                     .then(result => {
                         req.flash('infoMessage', "Thanks for your order! We'll contact with you soon.")
-                        return res.redirect('/user/cart')
+                        res.redirect('/user/cart')
+                        const msg = {
+                            to: req.session.user.email,
+                            from: 'node-test-shop@example.com',
+                            subject: `Order #${currentIndex}`,
+                            text: 'and easy to do anywhere, even with Node.js',
+                            html: `<p>Order #${currentIndex} by total sum $${totalPrice} was successfully created</p>
+                                <p>You can check the order status in <a href="http://localhost:3030/user/orders">your orders page<a></p>`
+                          };
+                          return sgMail.send(msg);
+                    })
+                    .catch(error => {
+                        console.log(error);
                     })
             })
         })

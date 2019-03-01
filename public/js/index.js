@@ -20,9 +20,12 @@ $(document).ready(function () {
     //     totalPrice.innerText = '$ ' + (price * amount);
     // })
 
-    const orderSelect = document.getElementById('orderStatusSelect');
-    orderSelect.addEventListener('change', e => {
-        const buttonSend = document.getElementById('sendFormButtonHidden');
-        buttonSend.click();
+    const orderSelects = [...document.getElementsByClassName('orderStatusSelect')]
+
+    orderSelects.forEach((item, i) => {
+        const orderId = item.dataset.orderId;
+        item.addEventListener('change', e => {
+            document.getElementById(`sendFormButtonHidden${orderId}`).click();
+        })
     })
 })
