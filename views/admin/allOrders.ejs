@@ -40,7 +40,13 @@
                                     <button id="sendFormButtonHidden<%= order._id %>" class="d-none" type="submit">Send data</button>
                                 </form>
                             </td>
-                            <td><button class="btn btn-danger">Remove order</button></td>
+                            <td>
+                                <form name="orderForm" method="post" action="/admin/remove-order/<%= order._id %> ">
+                                    <input type="hidden" name="orderId" value="<%= order._id %>">
+                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                    <button type="submit" class="btn btn-danger">Remove order</button>
+                                </form>
+                            </td>
                         </tr>
                     <% } %>
                 </tbody>

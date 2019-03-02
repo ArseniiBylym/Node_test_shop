@@ -138,3 +138,12 @@ exports.changeOrderStatus = (req, res, next) => {
                 }) 
         })
 }
+
+exports.removeOrder = (req, res, next) => {
+    const {orderId} = req.body
+    Order.deleteOne({_id: orderId}) 
+        .then(order => {
+            req.flash('infoMessage', 'Order was successfully removed')
+            res.redirect('/admin/all-orders')
+        })
+}
