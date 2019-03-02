@@ -18,7 +18,6 @@ exports.getUserCart = (req, res, next) => {
                     totalPrice += +item.price
                 })
             }
-            console.log('Total ptice is', totalPrice);
             res.render('user/cart', {
                 path: '/cart',
                 totalPrice: totalPrice
@@ -29,11 +28,8 @@ exports.getUserCart = (req, res, next) => {
 
 exports.addToCart = (req, res, next) => {
     const { product, userId } = req.body;
-    console.log('User is: ', userId)
-    console.log(product)
     Product.findById(product)
         .then(prod => {
-            console.log(prod);
             if (!prod) {
                 console.log('Product not found');
                 return res.redirect('/products');
@@ -69,7 +65,6 @@ exports.removeFromCart = (req, res, next) => {
 exports.comfirmOrder = async (req, res, next) => {
     let { fullOrder } = req.body;
     fullOrder = JSON.parse(fullOrder);
-    console.log(fullOrder)
 
     let totalPrice = 0;
 
@@ -79,7 +74,6 @@ exports.comfirmOrder = async (req, res, next) => {
 
     const lastIndex = await Order.find({}).count()
 
-    console.log('last index: ', lastIndex);
     const currentIndex = lastIndex > 0 ? lastIndex + 1 : 1;
 
     const order = new Order({
@@ -126,7 +120,6 @@ exports.getUserOrders = (req, res, next) => {
 
     Order.find({ userId: userId })
         .then(orders => {
-            console.log(orders);
             res.render('user/orders', {
                 path: '/user/orders',
                 orders: orders,

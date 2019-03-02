@@ -18,7 +18,6 @@ exports.postAddProduct = (req, res, next) => {
     });
     product.save()
         .then(result => {
-            console.log('Product created')
             req.flash('infoMessage', 'New product was successfully added')
             res.redirect('/products');
         })
@@ -31,11 +30,9 @@ exports.postAddProduct = (req, res, next) => {
 
 exports.postDeleteProduct = (req, res, next) => {
     const {productID} = req.body;
-    console.log(productID);
     Product.findByIdAndDelete(productID)
         .then(result => {
             if (!result) {
-                console.log('Product not found');
                 res.redirect('/products');
                 return;
             }
@@ -54,7 +51,6 @@ exports.postDeleteProduct = (req, res, next) => {
 
 exports.getEditProduct = (req, res, next) => {
     const productID = req.params.productID;
-    console.log(productID);
     Product.findById(productID)
         .then(result => {
             if (!result) {
@@ -64,7 +60,6 @@ exports.getEditProduct = (req, res, next) => {
             return result;
         })
         .then(product => {
-            console.log(product)
             res.render('admin/editProduct', {
                 product: product,
                 path: '/admin/edit-product'
@@ -73,13 +68,10 @@ exports.getEditProduct = (req, res, next) => {
     }
     
     exports.postEditProduct = (req, res, next) => {
-        console.log(req.body);
         const { productID, title, price, description} = req.body;
         const image = req.file
-        console.log(productID);
         Product.findById(productID)
         .then(product => {
-            console.log(product);
             product.title = title || product.title;
             product.price = price || product.price;
             product.description = description;
@@ -103,7 +95,6 @@ exports.getEditProduct = (req, res, next) => {
 
 exports.getAllOrders = async (req, res, next) => {
     let allOrders = await Order.find();
-    console.log(allOrders[0].status)
     res.render('admin/allOrders', {
         path: '/admin/all-orders',
         orders: allOrders

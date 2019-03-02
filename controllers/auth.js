@@ -1,6 +1,7 @@
 const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
 const sgMail = require('@sendgrid/mail');
+const {validationResult} = require('express-validator/check');
 
 sgMail.setApiKey('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');
 const User = require('../models/user');
@@ -13,6 +14,7 @@ exports.getLogin = (req, res, next) => {
 
 exports.postLogin = (req, res, next) => {
     const {email, password}  = req.body;
+
     User.findOne({email: email})
         .then(user => {
             if (!user) {
@@ -30,7 +32,7 @@ exports.postLogin = (req, res, next) => {
                         req.session.isLoggedIn = true;
                         req.session.user = user;
                         return req.session.save(err => {
-                            console.log('error');
+                            console.log(err);
                             res.redirect('/');
                         })
                     }
@@ -46,16 +48,44 @@ exports.postLogin = (req, res, next) => {
 exports.getSignin = (req, res, next) => {
     res.render(`auth/signin`, {
         path: `/signin`,
+        defaultValues: {
+            name: '',
+            email: '',
+            password: '',
+            confPassword: ''
+        },
+        validationErrors: {}
     });
 };
 
 exports.postSignin = (req, res, next) => {
     const {name, email, password, confPassword} = req.body;
+    const errors = validationResult(req);
+    
 
-    if(password !== confPassword) {
-        req.flash('errorMessage', "Password doesn't matched, try again")
-        return res.redirect('/login');
+    if(!errors.isEmpty()) {
+        const validationErrors = {}
+        errors.array().forEach((item, i) => {
+            validationErrors[item.param] = item.msg
+        });
+        return  res.status(422).render('auth/signin', {
+            path: '/signin',
+            defaultValues: {
+                name: name,
+                email: email,
+                password: password,
+                confPassword: confPassword
+            },
+            validationErrors: validationErrors
+        });
+
+            // return res.redirect('auth/signin')
     }
+
+    // if(password !== confPassword) {
+    //     req.flash('errorMessage', "Password doesn't matched, try again")
+    //     return res.redirect('/login');
+    // }
 
     bcrypt
         .hash(password, 12)

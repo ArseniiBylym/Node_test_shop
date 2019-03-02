@@ -72,10 +72,7 @@ app.use((req, res, next) => {
 })
 
 app.use((req, res, next) => {
-    console.log('hello')
-    console.log(req.session.user);
     if (!req.session.user) {
-        console.log('case 1')
         return next();
     }
     User.findById(req.session.user._id)
@@ -83,8 +80,6 @@ app.use((req, res, next) => {
             if (!user) {
                 return next();
             };
-            console.log(user.email);
-            console.log('User cart is: ', user.cart.length)
             // req.user = user;
             res.locals.user = user;
             next();
