@@ -6,9 +6,15 @@ const {validationResult} = require('express-validator/check');
 sgMail.setApiKey('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');
 const User = require('../models/user');
 
+
+
 exports.getLogin = (req, res, next) => {
     res.render(`auth/login`, {
         path: `/login`,
+        defaultValues: {
+            email: '',
+            password: ''
+        }
     });
 };
 
@@ -27,7 +33,14 @@ exports.postLogin = (req, res, next) => {
                     if (!result) {
                         console.log('Wrong password')
                         req.flash('errorMessage', 'Wrong password or email')
-                        res.redirect('/login');
+                        return res.status(422).render('auth/login', {
+                            path: '/login',
+                            defaultValues: {
+                                email: email,
+                                password: password,
+                            },
+                            errorMessage: req.flash('errorMessage')
+                        })
                     } else {
                         req.session.isLoggedIn = true;
                         req.session.user = user;
@@ -78,15 +91,7 @@ exports.postSignin = (req, res, next) => {
             },
             validationErrors: validationErrors
         });
-
-            // return res.redirect('auth/signin')
     }
-
-    // if(password !== confPassword) {
-    //     req.flash('errorMessage', "Password doesn't matched, try again")
-    //     return res.redirect('/login');
-    // }
-
     bcrypt
         .hash(password, 12)
         .then(hPassword => {

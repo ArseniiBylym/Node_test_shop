@@ -11,12 +11,17 @@
                     <form class="" method="POST" enctype="multipart/form-data" >
                         <div class="form-group">
                             <label class="w-100">Email
-                                <input name="email" type="email" class="form-control">
+                                <input name="email" type="email" class="form-control" value="<%= defaultValues.email ? defaultValues.email : '' %>">
                             </label>
                         </div>
                         <div class="form-group">
                             <label class="w-100">Password
-                                <input name="password" type="password" class="form-control" >
+                                <input 
+                                    name="password" 
+                                    type="password"
+                                    class="<%= defaultValues.password ? 'form-control is-invalid' : 'form-control' %>" 
+                                    value="<%= defaultValues.password ? defaultValues.password : '' %>"
+                                >
                             </label>
                         </div>
                         <input type="hidden" name="_csrf" value="<%= csrfToken %>">

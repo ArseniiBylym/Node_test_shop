@@ -7,19 +7,57 @@
         <div class="row justify-content-center">
             <form class="col-6 align-self-center" method="POST" enctype="multipart/form-data" >
                 <div class="form-group">
-                    <label for="productName">Product name</label>
-                    <input name="title" type="text" class="form-control" id="productName" aria-describedby="productNameHelp" placeholder="Enter the product name">
+                    <label for="productName">Product name <sup class="text-danger" style="font-size: 10px">&#10033;</sup></label>
+                    <input 
+                        name="title" 
+                        type="text" 
+                        class="<%= validationErrors.title ? 'form-control is-invalid' : 'form-control' %>" 
+                        id="productName" 
+                        aria-describedby="productNameHelp" 
+                        placeholder="Enter the product name"
+                        value="<%= defaultValues.title ? defaultValues.title : '' %>"
+                    >
+                    <% if(validationErrors.title) {%>
+                        <div class="invalid-feedback"><%= validationErrors.title %></div>
+                    <% } else if(defaultValues.title) {%>
+                        <div class="valid-feedback">Looks good!</div>
+                    <% } %>
                 </div>
                 <div class="form-group">
-                    <label for="productPrice">Price</label>
-                    <input name="price" step="0.01" type="number" class="form-control" id="productPrice" placeholder="$0.00">
+                    <label for="productPrice">Price <sup class="text-danger" style="font-size: 10px">&#10033;</sup></label>
+                    <input 
+                        name="price"
+                        step="0.01" 
+                        type="number" 
+                        class="<%= validationErrors.price ? 'form-control is-invalid' : 'form-control' %>" 
+                        id="productPrice" 
+                        placeholder="$0.00"
+                        value="<%= defaultValues.price ? defaultValues.price : '' %>"
+                    >
+                      <% if(validationErrors.price) {%>
+                        <div class="invalid-feedback"><%= validationErrors.price %></div>
+                    <% } else if(defaultValues.price) {%>
+                        <div class="valid-feedback">Looks good!</div>
+                    <% } %>
                 </div>
                 <div class="form-group">
-                    <label for="productDescription">Description</label>
-                    <textarea name="description" class="form-control" id="productDescription" rows="3"></textarea>
+                    <label for="productDescription">Description <sup class="text-danger" style="font-size: 10px">&#10033;</sup></label>
+                    <textarea 
+                        name="description" 
+                        class="<%= validationErrors.description ? 'form-control is-invalid' : 'form-control' %>" 
+                        id="productDescription" 
+                        rows="3"
+                    >
+                        <%= defaultValues.description ? defaultValues.description : '' %>
+                    </textarea>
+                     <% if(validationErrors.description) {%>
+                        <div class="invalid-feedback"><%= validationErrors.description %></div>
+                    <% } else if(defaultValues.description) {%>
+                        <div class="valid-feedback">Looks good!</div>
+                    <% } %>
                 </div>
                 <div class="form-group">
-                    <label for="productImage">Add product image</label>
+                    <label for="productImage">Add product image <sup class="text-danger" style="font-size: 10px">&#10033;</sup></label>
                     <input name="image" id="image" type="file" class="form-control-file">
                 </div>
                 <input type="hidden" name="_csrf" value="<%= csrfToken %>">

@@ -1,6 +1,21 @@
 const {check, body} = require('express-validator/check');
 const User = require('../models/user');
 
+exports.addProductValidator = [
+    body('title')
+        .trim()
+        .isLength({min: 1})
+        .withMessage('Please enter the product name'),
+    body('price')
+        .trim()
+        .isFloat({min: 1.00})
+        .withMessage('Please set the product price'),
+    body('description')
+        .trim()
+        .isLength({min: 10})
+        .withMessage('Plese add the product description')
+]
+
 exports.signinValidator = [
     body('name', 'User name field is required and should contain at least 3 symbols')
         .trim()

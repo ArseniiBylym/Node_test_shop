@@ -1,15 +1,40 @@
 const Product = require('../models/product');
 const Order = require('../models/order');
 const deleteFile = require('../utils/file').deleteFile;
+const {validationResult} = require('express-validator/check');
 
 exports.getAddProduct = (req, res, next) => {
     res.render(`admin/addProduct`, {
         path: `/admin/add-products`,
+        defaultValues: {
+            title: '',
+            price: '',
+            description: '',
+        },
+        validationErrors: []
     });
 };
 
 exports.postAddProduct = (req, res, next) => {
     const {body: {title, price, description}, file}  = req;
+
+    const errors = validationResult(req);
+    if(!errors.isEmpty()){
+        const validationErrors = {}
+        errors.array().forEach((item, i) => {
+            validationErrors[item.param] = item.msg
+        });
+        return  res.status(422).render('admin/addProduct', {
+            path: '/admin/add-products',
+            defaultValues: {
+                title: title,
+                price: price,
+                description: description,
+            },
+            validationErrors: validationErrors
+        });
+    }
+
     const product = new Product({
         title: title,
         price: price,
