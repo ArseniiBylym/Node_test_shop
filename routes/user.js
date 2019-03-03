@@ -10,5 +10,6 @@ router.post('/cart/remove-item', userController.removeFromCart);
 
 router.post('/cart/confirm-order', userController.comfirmOrder);
 router.get('/orders', userController.getUserOrders);
+router.get('/orders/:orderId', userController.getUserOrderPdf);
 
 module.exports = router;

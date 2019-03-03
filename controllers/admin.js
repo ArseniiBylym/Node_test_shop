@@ -134,7 +134,7 @@ exports.changeOrderStatus = (req, res, next) => {
             order.save()
                 .then(result => {
                     req.flash('infoMessage', 'Order status has changed')
-                    res.redirect('/admin/all-orders')
+                    return res.redirect('/admin/all-orders')
                 }) 
         })
 }
@@ -144,6 +144,6 @@ exports.removeOrder = (req, res, next) => {
     Order.deleteOne({_id: orderId}) 
         .then(order => {
             req.flash('infoMessage', 'Order was successfully removed')
-            res.redirect('/admin/all-orders')
+            return res.redirect('/admin/all-orders')
         })
 }

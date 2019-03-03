@@ -2,6 +2,9 @@ const Product = require('../models/product');
 const User = require('../models/user');
 const Order = require('../models/order');
 const sgMail = require('@sendgrid/mail');
+const fs = require('fs');
+const path = require('path');
+const PDFDocument = require('pdfkit');
 
 sgMail.setApiKey('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');
 
@@ -125,4 +128,31 @@ exports.getUserOrders = (req, res, next) => {
                 orders: orders,
             })
         })
+}
+
+exports.getUserOrderPdf = (req, res, next) => {
+    const {orderId} = req.params;
+    Order.findById(orderId) 
+        .then(order => {
+            if(!order) {
+                return next(new Error('No order found'));
+            }
+            const orderDocName = 'order#' + orderId + '.pdf';
+            const orderDocPath = path.join('data', 'ordersDocs', orderDocName);
+
+            const pdfDoc = new PDFDocument();
+            res.setHeader('Content-Type', 'application/pdj');
+            res.setHeader('Content-Disposition', 'inline; filename="' + orderDocName + '"')
+            pdfDoc.pipe(fs.createWriteStream(orderDocPath));
+            pdfDoc.pipe(res);
+
+            pdfDoc.fontSize(20).text('Order #' + order.index);
+            pdfDoc.text('...................');
+            order.products.forEach((item, i) => {
+                pdfDoc.fontSize(16).text(`${i + 1} - ${item.title} --- $ ${item.price.toFixed(2)}`)
+            })
+            pdfDoc.text('..................');
+            pdfDoc.fontSize(20).text(`Total order price - $ ${order.totalPrice}`)
+            pdfDoc.end();
+    })
 }

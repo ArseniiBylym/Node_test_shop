@@ -8,7 +8,6 @@ const csrf = require('csurf');
 const flash = require('connect-flash');
 const multer = require('multer');
 
-
 const errorController = require(`./controllers/error`);
 const User = require('./models/user');
 const MONGODB_URI = `mongodb://localhost:27017/shop`;
@@ -80,8 +79,8 @@ app.use((req, res, next) => {
             if (!user) {
                 return next();
             };
-            // req.user = user;
-            res.locals.user = user;
+            req.user = user;
+            // res.locals.user = user;
             next();
         })
         .catch(error => {
@@ -89,12 +88,12 @@ app.use((req, res, next) => {
         });
 });
 
-// app.use((res, req, next) => {
-//     if (req.user) {
-//         res.locals.user = req.user;
-//     }
-//     next();
-// })
+app.use((req, res, next) => {
+    if (req.user) {
+        res.locals.user = req.user;
+    }
+    next();
+})
 
 app.use(shopRoutes);
 app.use('/admin', adminRoutes);
@@ -103,6 +102,7 @@ app.use('/user', userRoutes);
 app.get(`/500`, errorController.get500);
 app.use(errorController.get404);
 // app.use((error, req, res, next) => {
+//     console.log(error)
 //     res.status(500).render(`500`, {
 //         path: `/500`,
 //         isAuth: req.session.isLoggedIn

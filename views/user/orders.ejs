@@ -10,6 +10,7 @@
                     <div class="col col-md-6 offset-md-3 card my-4 bg-light">
                         <div class="cart-header d-flex flex-row justify-content-between">
                             <div>Order #<%= order.index %></div>
+                            <div class="ml-3 mr-auto"><a href="/user/orders/<%= order._id %>">Download pdf</a></div>
                             <div><%= order.date.toLocaleString() %></div>
                         </div>
                         <div class="cart-body">
