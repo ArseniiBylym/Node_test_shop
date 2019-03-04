@@ -7,6 +7,7 @@ const mongoDBStore = require('connect-mongodb-session')(session);
 const csrf = require('csurf');
 const flash = require('connect-flash');
 const multer = require('multer');
+const morgan = require('morgan');
 
 const errorController = require(`./controllers/error`);
 const User = require('./models/user');
@@ -43,6 +44,7 @@ const adminRoutes = require('./routes/admin');
 const authRoutes = require(`./routes/auth`);
 const userRoutes = require('./routes/user');
 
+app.use(morgan('tiny'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(multer({storage: fileStorage, fileFilter: fileFilter}).single(`image`));
 app.use(express.static(path.join(__dirname, `public`)));

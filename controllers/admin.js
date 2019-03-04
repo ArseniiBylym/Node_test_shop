@@ -2,6 +2,7 @@ const Product = require('../models/product');
 const Order = require('../models/order');
 const deleteFile = require('../utils/file').deleteFile;
 const {validationResult} = require('express-validator/check');
+const debug = require('debug')('addProduct');
 
 exports.getAddProduct = (req, res, next) => {
     res.render(`admin/addProduct`, {
@@ -19,11 +20,14 @@ exports.postAddProduct = (req, res, next) => {
     const {body: {title, price, description}, file}  = req;
 
     const errors = validationResult(req);
-    if(!errors.isEmpty()){
+    if(!errors.isEmpty() || !file){
         const validationErrors = {}
         errors.array().forEach((item, i) => {
             validationErrors[item.param] = item.msg
         });
+        if(!file) {
+            validationErrors.file = 'The image is required'
+        }
         return  res.status(422).render('admin/addProduct', {
             path: '/admin/add-products',
             defaultValues: {
