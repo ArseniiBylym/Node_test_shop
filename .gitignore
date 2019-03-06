@@ -1,5 +1,5 @@
 node_modules
-images/products/*
+# images/products/*
 .vscode
-data/ordersDocs/*
+# data/ordersDocs/*
 .env
