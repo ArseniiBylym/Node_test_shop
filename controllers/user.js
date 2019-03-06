@@ -5,8 +5,9 @@ const sgMail = require('@sendgrid/mail');
 const fs = require('fs');
 const path = require('path');
 const PDFDocument = require('pdfkit');
+require('dotenv').config();
 
-sgMail.setApiKey('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');
+sgMail.setApiKey(process.env.MAIL_API_KEY);
 
 exports.getUserCart = (req, res, next) => {
 
@@ -102,7 +103,7 @@ exports.comfirmOrder = async (req, res, next) => {
                                 subject: `Order #${currentIndex}`,
                                 text: 'and easy to do anywhere, even with Node.js',
                                 html: `<p>Order #${currentIndex} by total sum $${totalPrice} was successfully created</p>
-                                <p>You can check the order status in <a href="http://localhost:3030/user/orders">your orders page<a></p>`
+                                <p>You can check the order status in <a href="${path.join(__dirname)}/user/orders">your orders page<a></p>`
                             };
                             return sgMail.send(msg);
                         })

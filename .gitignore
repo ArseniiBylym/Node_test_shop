@@ -2,3 +2,4 @@ node_modules
 images/products/*
 .vscode
 data/ordersDocs/*
+.env

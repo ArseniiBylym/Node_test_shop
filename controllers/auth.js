@@ -2,8 +2,10 @@ const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
 const sgMail = require('@sendgrid/mail');
 const {validationResult} = require('express-validator/check');
+require('dotenv').config();
+const path = require('path');
 
-sgMail.setApiKey('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');
+sgMail.setApiKey(process.env.MAIL_API_KEY);
 const User = require('../models/user');
 
 
@@ -151,7 +153,7 @@ exports.postResetPassword = (req, res, next) => {
                     from: 'node-test-shop@example.com',
                     subject: `Reset password`,
                     html: `<p>You reset password on youre profile at Node-test-shop</p>
-                    <p>Click this <a href='http://localhost:3030/reset/${token}'>link</a> to set a new password`
+                    <p>Click this <a href='${path.join(__dirname)}/reset/${token}'>link</a> to set a new password`
                 };
                 return sgMail.send(msg);
             })

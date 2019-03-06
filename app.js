@@ -8,10 +8,12 @@ const csrf = require('csurf');
 const flash = require('connect-flash');
 const multer = require('multer');
 const morgan = require('morgan');
+require('dotenv').config();
 
 const errorController = require(`./controllers/error`);
 const User = require('./models/user');
-const MONGODB_URI = `mongodb://localhost:27017/shop`;
+// const MONGODB_URI = `mongodb://localhost:27017/shop`;
+const MONGODB_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_KEY}@cluster0-wijca.mongodb.net/${process.env.MONOG_DB_NAME}?retryWrites=true`;
 
 const app = express();
 const store = new mongoDBStore({
@@ -103,13 +105,13 @@ app.use(authRoutes);
 app.use('/user', userRoutes);
 app.get(`/500`, errorController.get500);
 app.use(errorController.get404);
-// app.use((error, req, res, next) => {
-//     console.log(error)
-//     res.status(500).render(`500`, {
-//         path: `/500`,
-//         isAuth: req.session.isLoggedIn
-//     });
-// });
+app.use((error, req, res, next) => {
+    console.log(error)
+    res.status(500).render(`500`, {
+        path: `/500`,
+        isAuth: req.session.isLoggedIn
+    });
+});
 
 mongoose
     .connect(MONGODB_URI, { useNewUrlParser: true })
